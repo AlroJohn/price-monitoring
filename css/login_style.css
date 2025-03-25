@@ -1,0 +1,215 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+background-color: #3b9fc4; /*393E46;*/
+}
+
+.container {
+width: 100%;
+max-width: 400px;
+padding: 20px;
+background-color: rgb(15, 79, 104);
+box-shadow: 15px 15px 10px rgb(26, 25, 25); /*, -10px -10px 15px rgb(143, 211, 211)*/
+/*box-shadow: 0px 0px 30px 5px #74d0d4;*/
+}
+
+
+.login-box {
+background-color: #fff;
+padding: 30px;
+border-radius: 20px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 10);
+}
+
+.login-box h3 {
+margin-top: -10px;
+margin-bottom:40px;
+padding: 0;
+color: #333;
+text-align: center;
+text-transform: uppercase;
+}
+
+
+.user-box {
+position: relative;
+margin-bottom: 40px;
+}
+
+.user-box input {
+width: 100%;
+padding: 2px 0;
+font-size: 18px;
+color: #333;
+margin-top: 0px;
+border: none;
+border-bottom: 2px solid #333;
+outline: none;
+background: transparent;
+}
+
+/* ADDED CODE */
+.user-box label {
+position: absolute;
+top: 25px;
+left: 0;
+padding: 10px 0;
+font-size: 16px;
+color: #020202;
+pointer-events: none;
+transition: .5s;
+}
+
+
+/* END OF ADDED CODE */
+
+button {
+display: inline-block;
+background-color: #333;
+color: #fff;
+padding: 10px 0px;
+font-size: 16px;
+text-transform: uppercase;
+text-decoration: none;
+position: relative;
+overflow: hidden;
+transition: 0.5s;
+letter-spacing: 2px;
+border-radius: 5px;
+}
+
+button:hover {
+background-color: #fff;
+color: #333;
+border: 1px solid #333;
+}
+
+button span {
+position: absolute;
+display: block;
+}
+
+button span:nth-child(1) {
+top: 0;
+left: -100%;
+width: 100%;
+height: 2px;
+background-color: #333;
+animation: animate1 1s linear infinite;
+}
+
+@keyframes animate1 {
+0% {
+  left: -100%;
+}
+50%,
+100% {
+  left: 100%;
+}
+}
+
+button span:nth-child(2) {
+top: -100%;
+right: 0;
+width: 2px;
+height: 100%;
+background-color: #333;
+animation: animate2 1s linear infinite;
+animation-delay: 0.25s;
+}
+
+@keyframes animate2 {
+0% {
+  top: -100%;
+}
+50%,
+100% {
+  top: 100%;
+}
+}
+
+button span:nth-child(3) {
+bottom: 0;
+right: -100%;
+width: 100%;
+height: 2px;
+background-color: #333;
+animation: animate3 1s linear infinite;
+animation-delay: 0.5s;
+}
+
+@keyframes animate3 {
+0% {
+  right: -100%;
+}
+50%,
+100% {
+  right: 100%;
+}
+}
+
+button span:nth-child(4) {
+bottom: -100%;
+left: 0;
+width: 2px;
+height: 100%;
+background-color: #333;
+animation: animate4 1s linear infinite;
+animation-delay: 0.75s;
+}
+
+@keyframes animate4 {
+0% {
+  bottom: -100%;
+}
+50%,
+100% {
+  bottom: 100%;
+}
+}
+
+.password-toggle-icon {
+position: absolute;
+top: 50%;
+right: 10px;
+transform: translateY(-50%);
+cursor: pointer;
+}
+
+.password-toggle-icon i {
+font-size: 18px;
+line-height: 1;
+color: #333;
+transition: color 0.3s ease-in-out;
+margin-bottom: 20px;
+}
+
+.password-toggle-icon i:hover {
+color: #000;
+}
+
+/*This is style for user buttons*/
+.d-flex{
+margin-bottom: 5%;
+}
+.d-flex a {
+          text-decoration: none;
+          color: black; /* Change the text color */
+          padding: 8px 15px; /* Adjust padding for each link */
+          border-radius: 5px;
+          width: 49%;
+}
+
+.active{
+  background-color: whitesmoke;
+}

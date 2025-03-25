@@ -1,0 +1,207 @@
+<!-- RECEIPT DIV START HERE | Dito nakalagay ang laman ng resibo amo GEO?-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS - Print Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #new-receipt-content {
+            width: 50%;
+            margin: 0 auto;
+            border: 2px solid #000;
+            padding: 3%; /* Add 2% padding to the receipt content */
+        }
+
+        .custom-header {
+            font-weight: bold;
+            color: blue;
+            margin: 0;
+            font-size: 120%; /* Increase text size by 20% */
+        }
+
+        .custom-subheader {
+            color: red;
+            font-weight: bold;
+            margin: 0;
+            font-size: 120%; /* Increase text size by 20% */
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .custom-table th, .custom-table td {
+            border: 1px solid #000;
+            padding: 5px;
+        }
+
+        .custom-total {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .custom-total td {
+            padding: 5px;
+        }
+
+        .custom-font-weight-bold {
+            font-weight: bold;
+        }
+
+        .custom-text-right {
+            text-align: right;
+        }
+
+        .custom-text-primary {
+            color: blue;
+        }
+
+        /* Insert the additional code here */
+        .custom-form-group-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .custom-col-sm-9 {
+            display: inline-block;
+        }
+
+        .custom-col-sm-3 {
+            display: inline-block;
+        }
+
+        .custom-amount-cell {
+            width: 140%; /* Increase the width by 5% */
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <!-- RECEIPT DIV START HERE | Dito nakalagay ang laman ng resibo amo GEO?!-->
+    <div class="card shadow mb-4" id="new-receipt-content">
+        <div class="card-body">
+            <!-- THIS SECTION IS FOR STORE LOGO & TRANSACTION DATE & NUMBER -->
+            <div class="custom-form-group-row text-left mb-0" style="margin: 0; padding: 0;">
+                <div class="custom-col-sm-9">
+                    <h4 class="custom-header" style="margin: 0; padding: 0;">BOSQUILLOS STORE</h4>
+                    <h6 style="margin: 0; padding: 0;">The Shop that you love.</h6>
+                </div>
+                <div class="custom-col-sm-3 py-1">
+                    <h6 style="margin: 0; padding: 0;">Date: <?php echo $date; ?></h6>
+                    <h6 class="custom-subheader" style="margin: 0; padding: 0;">TRANSACTION #<?php echo $tid; ?></h6>
+                </div>
+            </div>
+
+            <hr>
+            <!-- THIS SECTION IS FOR RECEIPT HEADER & TENDER SECTION -->
+            <div class="custom-form-group-row text-left mb-0 py-2">
+                <div class="custom-col-sm-4 py-1">
+                    <h5 class="custom-font-weight-bold">CUSTOMER RECEIPT</h5>
+                </div>
+                <div class="custom-col-sm-4 py-1"></div>
+                <div class="custom-col-sm-4 py-1" style="margin-right: 120px;">
+                    <h6 class="custom-font-weight-bold">ENCODER/TENDER(signature):</h6>
+                </div>
+            </div>
+
+            <!-- THIS SECTION IS FOR TABLE OF PURCHASED -->
+            <table class="custom-table" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th width="6%">No.</th>
+                        <th>PRODUCTS NAME</th>
+                        <th width="10%">Qty</th>
+                        <th width="17%">Price</th>
+                        <th width="17%">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php  
+                    $query = "SELECT *
+                              FROM receipt_details
+                              WHERE TRANS_D_ID = '$tid'";
+                    $result = mysqli_query($db, $query) or die(mysqli_error($db));
+                    $rowNumber = 0; // Initialize row number
+
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $Sub = $row['QTY'] * $row['PRICE'];
+                        $rowNumber++; // Number incrementing command
+                        echo '<tr>';
+                        echo '<td>' . $rowNumber . '</td>'; // Output row number
+                        echo '<td>'. $row['PRODUCTS'].'</td>';
+                        echo '<td>'. $row['QTY'].'</td>';
+                        echo '<td>'. $row['PRICE'].'</td>';
+                        echo '<td>'. $Sub.'</td>';
+                        echo '</tr> ';
+                    }
+                    ?>
+                </tbody>
+            </table>
+
+            <!-- THIS SECTION IS FOR AMOUNT GIVEN BY CUSTOMER -->
+            <div class="custom-form-group-row text-left mb-0 py-2">
+                <div class="custom-col-sm-4 py-1"></div>
+                <div class="custom-col-sm-3 py-1"></div>
+                <div class="custom-col-sm-4 py-1">
+                    <h4 style="margin-top: 10%;" >Cash Amount: ₱ <?php echo number_format($cash, 2); ?></h4>
+
+                    <hr width="110%"><!-- LINE DIVIDER -->
+
+                    <!-- THIS SECTION IS FOR TABLE OF COMPUTATION & TOTAL -->
+                    <table class="custom-amount-cell"> <!-- Apply the custom class to the table -->
+                        <tr>
+                            <td class="custom-font-weight-bold">Subtotal</td>
+                            <td class="custom-text-right">₱ <?php echo $sub; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="custom-font-weight-bold">Less VAT</td>
+                            <td class="custom-text-right">₱ <?php echo $less; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="custom-font-weight-bold">Net of VAT</td>
+                            <td class="custom-text-right">₱ <?php echo $net; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="custom-font-weight-bold">Add VAT</td>
+                            <td class="custom-text-right">₱ <?php echo $add; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="custom-font-weight-bold">Discount</td>
+                            <td class="custom-text-right">₱ 0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="custom-font-weight-bold">TOTAL AMOUNT</td>
+                            <td class="custom-font-weight-bold custom-text-right custom-text-primary">₱ <?php echo $grand; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="custom-font-weight-bold">CHANGE</td>
+                            <td class="custom-font-weight-bold custom-text-right custom-text-primary">₱ <?php echo $cash - $grand; ?></td>
+                        </tr>
+                    </table>
+                    
+                </div>
+                <div class="custom-col-sm-1 py-1"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<!-- RECEIPT DIV END HERE | Dito nakalagay ang laman ng resibo amo GEO?!-->
+
+<?php 
+    include '../includes/print.html';
+?>
+
+
+<?php
+    include '../includes/footer.php';
+?>
+

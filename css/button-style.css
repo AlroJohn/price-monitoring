@@ -1,0 +1,127 @@
+
+/*PRINT BUTTON DESIGN HERE*/
+    #print-button {
+    position: fixed;
+    top: 80%;
+    right: 1.5%;
+    transform: translateY(-50%);
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    }
+
+    #print-button:hover {
+    background-color: #0056b3;
+    }
+
+
+
+
+    
+
+/*SAVE IMAGE BUTTON DESIGN HERE*/
+    #save-image {
+        position: fixed;
+        top: 70%;
+        right: 1.5%;
+        transform: translateY(-50%);
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+    
+    #save-image:hover {
+        background-color: #0056b3;
+    }
+
+
+
+
+
+
+
+
+/*STYLE FOR POS_RECEIPT.PHP PAGE*/
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    /* Apply custom styles to the receipt content */
+    #new-receipt-content {
+        border-radius: 10px;
+        width: 70%;
+        margin: 0 auto;
+        border: 2px solid #000;
+        padding: 2%;
+    }
+
+    .custom-header {
+        font-weight: bold;
+        color: blue;
+        font-size: 180%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .custom-subheader {
+        color: red;
+        font-weight: bold;
+        font-size: 110%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .custom-table th, .custom-table td {
+        border: 1px solid #000;
+        padding: 5px;
+        color: black;
+    }
+
+    .custom-font-weight-bold {
+        font-weight: bold;
+        color: black;
+    }
+
+    .custom-text-right {
+        text-align: left;
+        color: black;
+    }
+
+    .custom-text-primary {
+        color: blue;
+    }
+
+    .custom-form-group-row {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .custom-col-sm-9 {
+        display: inline-block;
+        color: black;
+    }
+
+    .custom-col-sm-3 {
+        display: inline-block;
+        color: black;
+    }
+
+    .custom-col-sm-4 {
+        color: black;
+    }
+
+    .custom-amount-cell {
+        width: 120%;
+    }

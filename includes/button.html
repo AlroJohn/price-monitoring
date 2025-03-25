@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRINT RECEIPT</title>
+
+    <!--STYLE LINK HERE-->
+    <link rel="stylesheet" type="text/css" href="..\css\button-style.css">
+
+    <!--FUNCTIONS PRINTING & IMAGE SAVING LINKS-->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <link rel="stylesheet" type="text/css" media="print" href="..\css\button-style.css">
+
+</head>
+
+<style>
+
+
+    @media print {
+        body {
+            font-size: 12pt; /* Adjust font size for better readability when printed */
+        }
+
+        /* Adjust other styles to fit the content on letter-sized paper */
+        #new-receipt-content {
+            width: 100%; /* Set width to fit a letter-sized paper */
+            margin: 0 auto; /* Center the content horizontally on the printed page */
+        }
+    }
+
+</style>
+
+
+<body>
+
+<!--THIS SECTION IS FOR SAVE IMAGE BUTTON FUNCTIONS-->
+    <button id="save-image" onclick="centerImageOnCanvas()">IMAGE</button>
+    <script>
+            function centerImageOnCanvas() {
+                const targetElement = document.getElementById('new-receipt-content');
+                const canvas = document.createElement('canvas'); // Create a temporary canvas
+
+                // Define the width and minimum height of the canvas
+                const canvasWidth = 8.5 * 105; // 8.5 inches at 105 DPI
+                const minHeight = 11 * 105; // Set a minimum height in pixels
+
+                // Get the actual height of the content
+                const contentHeight = targetElement.offsetHeight;
+
+                // Calculate the adjusted height based on the minimum height constraint
+                const adjustedHeight = Math.max(minHeight, contentHeight);
+
+                // Set the canvas dimensions
+                canvas.width = canvasWidth;
+                canvas.height = adjustedHeight; // Adjust canvas height based on content height or minimum height
+
+                // Use html2canvas to capture the element as an image
+                html2canvas(targetElement, {
+                    width: canvasWidth,
+                    height: adjustedHeight, // Capture content height or minimum height
+                }).then(capturedCanvas => {
+                    const ctx = canvas.getContext('2d');
+
+                // Calculate the position to center the captured image
+                const imageX = (canvasWidth - capturedCanvas.width) / 2;
+                const imageY = (adjustedHeight - capturedCanvas.height) / 2;
+
+                // Draw the captured image on the canvas at the center
+                ctx.drawImage(capturedCanvas, imageX, imageY);
+
+                // Convert the canvas to a data URL
+                const dataUrl = canvas.toDataURL();
+
+                // Generate a unique filename based on the current date and time
+                const currentDate = new Date();
+                const fileName = `receipt_${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate()}_${currentDate.getHours()}${currentDate.getMinutes()}${currentDate.getSeconds()}.png`;
+
+                // Create a link element to download the image
+                const link = document.createElement('a');
+                link.href = dataUrl;
+                link.download = fileName; // Set the filename
+                link.style.display = 'none';
+                document.body.appendChild(link);
+
+                // Trigger a click event to start the download
+                link.click();
+
+                // Clean up the link element and temporary canvas
+                document.body.removeChild(link);
+            });
+        }
+    </script>
+
+
+
+
+
+
+    
+<!--THIS SECTION IS FOR PRINT BUTTON FUNCTIONS-->
+    <button id="print-button" onclick="printReceipt()">PRINT</button>
+    <script>
+        // Function to print the current page
+        function printReceipt() {
+            window.print();
+        }
+        // Add a click event listener to the print button
+        document.getElementById('print-button').addEventListener('click', function() {
+            printReceipt();
+        });
+    </script>
+
+
+</body>
+</html>
