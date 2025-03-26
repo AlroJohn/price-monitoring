@@ -8,7 +8,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
@@ -32,7 +32,7 @@ session_start();
     <!-- Centered Login Form -->
     <div class="flex justify-center items-center flex-grow">
         <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-            <h2 class="text-2xl font-bold text-center mb-6">Admin Login</h2>
+            <h2 class="text-2xl font-bold text-center mb-6">Store Login</h2>
 
             <!-- Error Messages -->
             <?php

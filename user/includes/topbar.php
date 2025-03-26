@@ -27,7 +27,7 @@
                     <i class="ph ph-map-trifold text-lg"></i>
                     <span>Track Registration</span>
                 </a>
-                <a href="../../admin/create_account.php" id="register-link"
+                <a href="../../admin/create_account2.php" id="register-link"
                     class="flex items-center space-x-1 text-white py-2 px-2 rounded-md hover:bg-blue-700 transition-colors whitespace-nowrap">
                     <i class="ph ph-user-plus text-lg"></i>
                     <span>Register Account</span>

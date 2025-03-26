@@ -115,6 +115,7 @@ include('../../includes/connection.php');
                                 echo "<div class='bg-gray-100 p-3 shadow-md rounded-lg text-center flex flex-col justify-between h-full'>
                                 <img src='$prodImg' alt='Product Image' class='h-28 w-full object-cover mb-2 rounded'>
                                 <h3 class='text-sm font-medium truncate-name flex-grow'>{$product['NAME']}</h3>
+                                 <h3 class='text-sm font-medium truncate-name flex-grow'>&#8369;{$product['PRICE']}/{$product['MEASURE']}</h3>
                                 <div class='mt-2 flex justify-center space-x-2'>
                                     <a href='product_details.php?shop_id={$product['SHOP_ID']}&product_code={$product['PRODUCT_CODE']}' class='bg-blue-500 text-white text-xs px-2 py-1 rounded'>Details</a>
                                     <a href='reserve_index.php?shop_id={$product['SHOP_ID']}&product_code={$product['PRODUCT_CODE']}' class='bg-green-500 text-white text-xs px-2 py-1 rounded'>Reserve</a>
