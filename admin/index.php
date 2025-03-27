@@ -84,7 +84,6 @@ include('../includes/sidebar.php'); // Sidebar for navigation
 ?>
 
 <div class="container mx-auto p-6">
-    <h1 class="text-5xl font-extrabold text-gray-900 mb-6">Admin Dashboard</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="bg-gradient-to-r from-blue-500 to-blue-700 p-6 rounded-2xl shadow-xl text-white flex items-center">
@@ -125,7 +124,7 @@ include('../includes/sidebar.php'); // Sidebar for navigation
     </div>
 
     <!-- Graph & Data Table Section -->
-    <div class="mt-10">
+    <!-- <div class="mt-10">
         <div class="p-6 bg-white rounded-2xl shadow-xl">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Stores Added Per Month</h2>
             <canvas id="storeChart"></canvas>
@@ -146,7 +145,7 @@ include('../includes/sidebar.php'); // Sidebar for navigation
             <canvas id="pendingChart"></canvas>
         </div>
 
-        <!-- Data Table for Monthly Statistics -->
+
         <div class="mt-10 p-6 bg-white rounded-2xl shadow-xl overflow-x-auto">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Monthly Data Summary</h2>
             <table class="min-w-full border-collapse border border-gray-300">
@@ -172,7 +171,7 @@ include('../includes/sidebar.php'); // Sidebar for navigation
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> -->
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

@@ -37,7 +37,7 @@ $pending_approvals = $pending_row['pending_count']; // Get the count
   <div class="h-screen w-64 bg-gray-900 text-white flex flex-col">
     <div class="flex items-center justify-center py-4 border-b border-gray-700">
       <img src="../icon/store/icons8-admin-64.png" class="h-10 w-10">
-      <span class="text-xl font-bold ml-2">ADMIN PANEL</span>
+      <span class="text-xl font-bold ml-2">ADMIN </span>
     </div>
 
     <!-- Navigation -->
