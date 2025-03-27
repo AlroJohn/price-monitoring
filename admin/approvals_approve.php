@@ -17,7 +17,8 @@ if (isset($_POST['owner_id'])) {
 
     if ($result && mysqli_num_rows($result) > 0) {
         $owner = mysqli_fetch_assoc($result);
-        $owner_name = trim($owner['FIRST_NAME']);
+        $owner_fname = trim($owner['FIRST_NAME']);
+        $owner_lname = trim($owner['LAST_NAME']);
         $phone_number = $owner['PHONE_NUMBER'];
 
         $update_query = "UPDATE owners SET STATUS = 'Active' WHERE OWNER_ID = $owner_id";
@@ -26,7 +27,7 @@ if (isset($_POST['owner_id'])) {
             try {
                 $telerivet = new Telerivet_API($api_key);
                 $project = $telerivet->initProjectById($project_id);
-                $message = "Hello $owner_name, your store registration has been approved! You can now log in and manage your store.";
+                $message = "Hello " . strtoupper($owner_fname) . " " . strtoupper($owner_lname) . ", your store registration has been approved! You can now log in and manage your store.";
 
                 $sent_msg = $project->sendMessage(array(
                     'to_number' => $phone_number,

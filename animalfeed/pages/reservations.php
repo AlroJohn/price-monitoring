@@ -2,17 +2,12 @@
 session_start();
 include '../../includes/connection.php';
 
-// Include Twilio SDK
-require_once '../../vendor/autoload.php';
-use Twilio\Rest\Client;
+// Include Telerivet PHP client
+require_once '../../telerivet-php-client/telerivet.php';
 
-// Twilio credentials
-$sid = "ACdabf1681158db88b2f68c88ae2647989";
-$token = "38f548f1f2e6e8f2e563dfcf6837e55a";
-$twilio_number = "+18507904788";
-
-// Fixed recipient number
-$fixed_recipient = "+639637271887";
+// Telerivet credentials
+$api_key = "iorNG_tQnRg6wi4gySKTK7ZHeqESikOr5JgM"; // Replace with your Telerivet API key
+$project_id = "PJ59c301d36eac6193"; // Replace with your Telerivet project ID
 
 // Ensure SHOP_ID session is set
 if (!isset($_SESSION['SHOP_ID'])) {
@@ -37,10 +32,15 @@ if (isset($_GET['action'], $_GET['id'])) {
     if (isset($status_map[$action])) {
         $new_status = $status_map[$action];
 
-        // If moving to "For Pick Up", update product stock and send SMS
-        if ($action == 'for_pickup') {
+        // If approving or moving to "For Pick Up", get product details and send SMS
+        if ($action == 'approve' || $action == 'for_pickup') {
             // Fetch reservation details
-            $res_query = "SELECT PRODUCT_CODE, QUANTITY, CUSTOMER_NAME FROM reservations WHERE RESERVATION_ID = ? AND SHOP_ID = ?";
+            $res_query = "SELECT r.PRODUCT_CODE, r.QUANTITY, r.CUSTOMER_NAME, r.CONTACT_NUMBER, 
+                          p.NAME AS PRODUCT_NAME, p.PRICE 
+                          FROM reservations r
+                          JOIN product p ON r.PRODUCT_CODE = p.PRODUCT_CODE AND r.SHOP_ID = p.SHOP_ID
+                          WHERE r.RESERVATION_ID = ? AND r.SHOP_ID = ?";
+
             $stmt_res = mysqli_prepare($db, $res_query);
             mysqli_stmt_bind_param($stmt_res, "ii", $reservation_id, $shop_id);
             mysqli_stmt_execute($stmt_res);
@@ -50,25 +50,43 @@ if (isset($_GET['action'], $_GET['id'])) {
                 $product_code = $res_row['PRODUCT_CODE'];
                 $quantity = $res_row['QUANTITY'];
                 $customer_name = $res_row['CUSTOMER_NAME'];
+                $contact_number = $res_row['CONTACT_NUMBER'];
+                $product_name = $res_row['PRODUCT_NAME'];
+                $price = $res_row['PRICE'];
 
-                // Deduct quantity from product stock
-                $update_stock = "UPDATE product SET QTY_STOCK = QTY_STOCK - ? WHERE PRODUCT_CODE = ? AND SHOP_ID = ?";
-                $stmt_stock = mysqli_prepare($db, $update_stock);
-                mysqli_stmt_bind_param($stmt_stock, "isi", $quantity, $product_code, $shop_id);
-                mysqli_stmt_execute($stmt_stock);
-                mysqli_stmt_close($stmt_stock);
+                // Calculate total amount
+                $total_amount = $quantity * $price;
 
-                // Send SMS notification
+                // If moving to "For Pick Up", update product stock
+                if ($action == 'for_pickup') {
+                    // Deduct quantity from product stock
+                    $update_stock = "UPDATE product SET QTY_STOCK = QTY_STOCK - ? WHERE PRODUCT_CODE = ? AND SHOP_ID = ?";
+                    $stmt_stock = mysqli_prepare($db, $update_stock);
+                    mysqli_stmt_bind_param($stmt_stock, "isi", $quantity, $product_code, $shop_id);
+                    mysqli_stmt_execute($stmt_stock);
+                    mysqli_stmt_close($stmt_stock);
+
+                    // Message for pickup
+                    $messageText = "Hello " . strtoupper($customer_name) . ", your order " . strtoupper($product_name) . " is now READY FOR PICK UP! Total amount: PHP " . number_format($total_amount, 2) . ". Thank you for your reservation.";
+                } else {
+                    // Message for approval
+                    $messageText = "Hello " . strtoupper($customer_name) . ", your order " . strtoupper($product_name) . " has been APPROVED! Total amount: PHP " . number_format($total_amount, 2) . ". We will notify you once it's ready for pickup. Thank you!";
+                }
+
+                // Send SMS notification using Telerivet
                 try {
-                    $client = new Client($sid, $token);
-                    $message = "Hello $customer_name, your reservation is Approved and Ready for pick up!";
-                    $client->messages->create(
-                        $fixed_recipient,
-                        [
-                            "from" => $twilio_number,
-                            "body" => $message
-                        ]
-                    );
+                    // Initialize Telerivet API
+                    $telerivet = new Telerivet_API($api_key);
+                    $project = $telerivet->initProjectById($project_id);
+
+                    // Send the message
+                    $sent_msg = $project->sendMessage(array(
+                        'to_number' => $contact_number,
+                        'content' => $messageText
+                    ));
+
+                    // Log successful message send
+                    error_log("SMS sent to $customer_name. Message ID: " . $sent_msg->id);
                 } catch (Exception $e) {
                     error_log("SMS failed: " . $e->getMessage());
                 }
