@@ -69,7 +69,7 @@ session_start();
             <!-- Register Business Button -->
             <div class="mt-4 text-center">
                 <p class="text-sm text-gray-600">Don't have a business account?</p>
-                <a href="../admin/create_account.php"
+                <a href="../admin/create_account2.php"
                     class="mt-2 inline-block bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition">
                     Register Business
                 </a>
