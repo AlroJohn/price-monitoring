@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2025 at 04:04 PM
+-- Generation Time: Mar 27, 2025 at 09:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,7 +46,10 @@ INSERT INTO `location` (`LOCATION_ID`, `STREET`, `PUROK`, `BARANGAY`) VALUES
 (192, NULL, '1', 'salvacion'),
 (193, NULL, 'Public Market', 'Daraga'),
 (194, NULL, '1', 'Salvacion'),
-(195, NULL, '5', 'Salvacion');
+(195, NULL, '5', 'Salvacion'),
+(196, NULL, '4', 'Salvacion'),
+(197, NULL, '4', 'Salvacion'),
+(198, NULL, '4', 'test');
 
 -- --------------------------------------------------------
 
@@ -113,8 +116,8 @@ CREATE TABLE `product` (
 
 INSERT INTO `product` (`SHOP_ID`, `PRODUCT_ID`, `STORE_ID`, `PRODUCT_CODE`, `NAME`, `DESCRIPTION`, `QTY_STOCK`, `MEASURE`, `PRICE`, `IMAGE`, `DATE_STOCK_IN`, `DATE_EXPIRY`, `pro_status`, `CATEGORY_ID`, `SUPPLIER_ID`) VALUES
 (77981742, 1227, 2, '1111', 'Pedigree', 'Dog Food', 10, 'kilo', 135.000, '../../assets/product_img/Pedigree779817421227.jpg', '2025-03-08', '2025-10-20', 'active', NULL, NULL),
-(77981742, 1228, 2, '2222', 'Triple Crown', 'Bird Feeds', 10, 'kilo', 70.000, '../../assets/product_img/Triple Crown779817421228.jpg', '2025-02-03', '2025-08-13', 'active', NULL, NULL),
-(77981742, 1233, 2, '3333', 'PRESTO Regular Pellet', 'cockfeeds', 20, 'kilo', 31.000, '../../assets/product_img/PRESTO Regular Pellet779817421233.jpg', '2025-01-31', '2025-12-27', 'active', NULL, NULL),
+(77981742, 1228, 2, '2222', 'Triple Crown', 'Bird Feeds', 5, 'kilo', 70.000, '../../assets/product_img/Triple Crown779817421228.jpg', '2025-02-03', '2025-08-13', 'active', NULL, NULL),
+(77981742, 1233, 2, '3333', 'PRESTO Regular Pellet', 'cockfeeds', 0, 'kilo', 31.000, '../../assets/product_img/PRESTO Regular Pellet779817421233.jpg', '2025-01-31', '2025-12-27', 'active', NULL, NULL),
 (77981742, 1234, 2, '4444', 'Premium Pre-Starter', 'feeds', 30, 'kilo', 62.250, '../../assets/product_img/Premium Pre-Starter779817421234.jpg', '2025-01-31', '2025-12-28', 'active', NULL, NULL),
 (77981742, 1235, 2, '5555', 'Lucy Cat Food', 'catfood', 20, 'kilo', 130.000, '../../assets/product_img/Lucy Cat Food779817421235.jpg', '2025-03-01', '2025-11-10', 'active', NULL, NULL),
 (73798598, 1236, 2, '1222', 'PIGROLAC Hog Starter', 'feeds', 30, 'kilo', 41.500, '../../assets/product_img/PIGROLAC Hog Starter737985981236.jpg', '2024-12-16', '2025-08-27', 'active', NULL, NULL),
@@ -167,6 +170,13 @@ CREATE TABLE `reservations` (
   `TIMESTAMP` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `reservations`
+--
+
+INSERT INTO `reservations` (`RESERVATION_ID`, `SHOP_ID`, `PRODUCT_CODE`, `CUSTOMER_NAME`, `CONTACT_NUMBER`, `QUANTITY`, `PICKUP_DATE`, `STATUS`, `TIMESTAMP`) VALUES
+(7, 77981742, '2222', 'test', '09815133675', 5, '2025-03-31', 'Picked Up', '2025-03-27 05:29:07');
+
 -- --------------------------------------------------------
 
 --
@@ -182,21 +192,19 @@ CREATE TABLE `stores` (
   `AVAILABILITY` enum('Open','Close') NOT NULL,
   `TIMESTAMP` timestamp NOT NULL DEFAULT current_timestamp(),
   `TIME_OPEN` varchar(10) DEFAULT '05:00 AM',
-  `TIME_CLOSE` varchar(10) DEFAULT '12:00 PM'
+  `TIME_CLOSE` varchar(10) DEFAULT '12:00 PM',
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `stores`
 --
 
-INSERT INTO `stores` (`SHOP_ID`, `STORE_ID`, `SHOP_NAME`, `ADDRESS`, `IMAGE`, `AVAILABILITY`, `TIMESTAMP`, `TIME_OPEN`, `TIME_CLOSE`) VALUES
-(1, 1, 'A. BOSEO', NULL, 0x424f53454f2e6a7067, 'Open', '2025-02-05 06:45:29', '05:00 AM', '12:00 PM'),
-(20670572, 3, 'SAMARINA HARDWARE', NULL, 0x73616d6172696e612e6a7067, 'Close', '2025-03-11 07:42:11', '05:00 AM', '12:00 PM'),
-(77981742, 2, 'ALIPIO STORE', NULL, 0x616c6970696f2e6a7067, 'Close', '2025-03-11 07:55:05', '05:00', '19:00'),
-(73798598, 2, 'Ribancos Agri Store', NULL, NULL, 'Close', '2025-03-11 17:57:51', '05:00 AM', '12:00 PM'),
-(42302750, 1, 'A. BOSEO', NULL, 0x626f73656f2e6a7067, 'Close', '2025-03-11 21:27:06', '05:00', '17:00'),
-(56772380, 3, 'J & JILL HARDWARE', NULL, NULL, 'Close', '2025-03-15 02:41:24', '05:00 AM', '12:00 PM'),
-(67692435, 1, 'JMIC MEAT SHOP', NULL, 0x53637265656e73686f7420323032352d30332d3133203131343834342e706e67, 'Close', '2025-03-15 02:48:00', '05:00 AM', '12:00 PM');
+INSERT INTO `stores` (`SHOP_ID`, `STORE_ID`, `SHOP_NAME`, `ADDRESS`, `IMAGE`, `AVAILABILITY`, `TIMESTAMP`, `TIME_OPEN`, `TIME_CLOSE`, `id`) VALUES
+(20670572, 3, 'SAMARINA CONTRUCTION HARDWARE', 'Legazpi City Albay', 0x616c6970696f2e6a7067, 'Open', '2025-03-11 07:55:05', '05:00', '19:00', 3),
+(42302750, 1, 'A. BOSEO', '', 0x626f73656f2e6a7067, 'Open', '2025-03-11 21:27:06', '05:00', '17:00', 5),
+(67692435, 1, 'JMIC MEAT SHOP', '', 0x53637265656e73686f7420323032352d30332d3133203131343834342e706e67, 'Open', '2025-03-15 02:48:00', '05:00 AM', '12:00 PM', 7),
+(77981742, 2, 'ALIPIO STORE', 'Legazpi City ', 0x616c6970696f2e6a7067, '', '2025-03-10 23:55:05', '05:00', '19:00', 8);
 
 -- --------------------------------------------------------
 
@@ -234,10 +242,10 @@ CREATE TABLE `store_type` (
 --
 
 INSERT INTO `store_type` (`STORE_ID`, `CATEGORY`) VALUES
-(1, 'Meatshop'),
 (2, 'Animal Feeds'),
 (3, 'Hardware'),
-(4, 'General Merchandise');
+(4, 'General Merchandise'),
+(1, 'Meatshop');
 
 -- --------------------------------------------------------
 
@@ -319,11 +327,9 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`ID`, `SHOP_ID`, `OWNER_ID`, `USERNAME`, `PASSWORD`, `TYPE_ID`, `STORE_ID`) VALUES
 (37, 1, 1, 'Admin', 'Admin1234', 1, 1),
 (39, 20670572, 18488, 'samarina', 'samarina123', 3, 3),
-(40, 77981742, 47588, 'alipio', 'alipio123', 3, 2),
-(41, 73798598, 90452, 'ribancos', 'ribancos123', 3, 2),
-(42, 42302750, 21338, 'buddy', 'buddy123', 3, 1),
-(43, 56772380, 34171, 'jojo', 'jojo123', 3, 3),
-(44, 67692435, 84785, 'malto', 'malto123', 3, 1);
+(40, 77981742, 47588, 'alipio', 'alipio123', 2, 2),
+(42, 42302750, 21338, 'buddy', 'buddy123', 1, 1),
+(44, 67692435, 84785, 'malto', 'malto123', 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -357,6 +363,12 @@ ALTER TABLE `product`
 --
 ALTER TABLE `reservations`
   ADD PRIMARY KEY (`RESERVATION_ID`);
+
+--
+-- Indexes for table `stores`
+--
+ALTER TABLE `stores`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `store_locations`
@@ -399,7 +411,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `location`
 --
 ALTER TABLE `location`
-  MODIFY `LOCATION_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=196;
+  MODIFY `LOCATION_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=199;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -411,7 +423,13 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `RESERVATION_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `RESERVATION_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `stores`
+--
+ALTER TABLE `stores`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `store_locations`
@@ -435,7 +453,7 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
