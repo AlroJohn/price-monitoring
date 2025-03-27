@@ -1,6 +1,7 @@
 {
     "require": {
         "twilio/sdk": "*",
-        "vlucas/phpdotenv": "*"
+        "vlucas/phpdotenv": "*",
+        "telerivet/telerivet-php-client": "^1.7"
     }
 }

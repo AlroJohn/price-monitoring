@@ -181,47 +181,55 @@ $stores = $store_query->fetch_all(MYSQLI_ASSOC);
 
                     <!-- Step 3: Credentials -->
                     <div class="form-step" id="step3">
-                    <div class="row">
-    <div class="col">
-        <div class="mb-3">
-            <label for="document_1" class="form-label">Upload Document</label>
-            <input type="file" name="document_1" id="document_1" class="form-control" required>
-            <!-- Mini details text with smaller font size and less opacity -->
-            <small style="font-size: 0.8rem; opacity: 0.7;">(ex. Barangay Permit, Business Permit..)</small>
-            <!-- Link to open modal for Document 1 preview (Initially hidden) -->
-             <a href="#" id="previewDoc1" data-bs-toggle="modal" data-bs-target="#previewModal" style="display:none;">Preview</a>
-        </div>
-    </div>
-    <div class="col">
-        <div class="mb-3">
-            <label for="document_2" class="form-label">Upload Valid ID</label>
-            <input type="file" name="document_2" id="document_2" class="form-control" required>
-            <!-- Mini details text with smaller font size and less opacity -->
-            <small style="font-size: 0.8rem; opacity: 0.7;">(ex. National ID, Drivers ID.. )</small><br>
-            <!-- Link to open modal for Document 2 preview (Initially hidden) -->
-            <a href="#" id="previewDoc2" data-bs-toggle="modal" data-bs-target="#previewModal" style="display:none;">Preview</a>
-        </div>
-    </div>
-</div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="document_1" class="form-label">Upload Document</label>
+                                    <input type="file" name="document_1" id="document_1" class="form-control" required>
+                                    <!-- Mini details text with smaller font size and less opacity -->
+                                    <small style="font-size: 0.8rem; opacity: 0.7;">(ex. Barangay Permit, Business
+                                        Permit..)</small>
+                                    <!-- Link to open modal for Document 1 preview (Initially hidden) -->
+                                    <a href="#" id="previewDoc1" data-bs-toggle="modal" data-bs-target="#previewModal"
+                                        style="display:none;">Preview</a>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="document_2" class="form-label">Upload Valid ID</label>
+                                    <input type="file" name="document_2" id="document_2" class="form-control" required>
+                                    <!-- Mini details text with smaller font size and less opacity -->
+                                    <small style="font-size: 0.8rem; opacity: 0.7;">(ex. National ID, Drivers ID..
+                                        )</small><br>
+                                    <!-- Link to open modal for Document 2 preview (Initially hidden) -->
+                                    <a href="#" id="previewDoc2" data-bs-toggle="modal" data-bs-target="#previewModal"
+                                        style="display:none;">Preview</a>
+                                </div>
+                            </div>
+                        </div>
 
-<!-- Modal for preview -->
-<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="previewModalLabel">File Preview</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <iframe id="filePreview" width="100%" height="400px" style="display:none;"></iframe>
-                <img id="imagePreview" width="100%" height="400px" style="display:none;" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+                        <!-- Modal for preview -->
+                        <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="previewModalLabel">File Preview</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <iframe id="filePreview" width="100%" height="400px"
+                                            style="display:none;"></iframe>
+                                        <img id="imagePreview" width="100%" height="400px" style="display:none;" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col">
@@ -410,74 +418,74 @@ $stores = $store_query->fetch_all(MYSQLI_ASSOC);
         });
     </script>
 
-<script>
-    // Function to preview document 1
-    document.getElementById('document_1').addEventListener('change', function() {
-        var file = this.files[0];
-        var previewLink = document.getElementById('previewDoc1');
-        var filePreview = document.getElementById('filePreview');
-        var imagePreview = document.getElementById('imagePreview');
+    <script>
+        // Function to preview document 1
+        document.getElementById('document_1').addEventListener('change', function () {
+            var file = this.files[0];
+            var previewLink = document.getElementById('previewDoc1');
+            var filePreview = document.getElementById('filePreview');
+            var imagePreview = document.getElementById('imagePreview');
 
-        // If a file is selected, show the preview link
-        if (file) {
-            previewLink.style.display = 'inline';  // Show the preview link
-        } else {
-            previewLink.style.display = 'none';  // Hide the preview link
-        }
-
-        // File preview functionality when preview link is clicked
-        previewLink.addEventListener('click', function(e) {
-            if (!file) {
-                e.preventDefault(); // Prevent modal from opening if no file is selected
+            // If a file is selected, show the preview link
+            if (file) {
+                previewLink.style.display = 'inline';  // Show the preview link
             } else {
-                if (file.type.includes('image')) {
-                    imagePreview.style.display = 'block';
-                    filePreview.style.display = 'none';
-                    imagePreview.src = URL.createObjectURL(file);
-                } else {
-                    imagePreview.style.display = 'none';
-                    filePreview.style.display = 'block';
-                    filePreview.src = URL.createObjectURL(file);
-                }
+                previewLink.style.display = 'none';  // Hide the preview link
             }
+
+            // File preview functionality when preview link is clicked
+            previewLink.addEventListener('click', function (e) {
+                if (!file) {
+                    e.preventDefault(); // Prevent modal from opening if no file is selected
+                } else {
+                    if (file.type.includes('image')) {
+                        imagePreview.style.display = 'block';
+                        filePreview.style.display = 'none';
+                        imagePreview.src = URL.createObjectURL(file);
+                    } else {
+                        imagePreview.style.display = 'none';
+                        filePreview.style.display = 'block';
+                        filePreview.src = URL.createObjectURL(file);
+                    }
+                }
+            });
         });
-    });
 
-    // Function to preview document 2
-    document.getElementById('document_2').addEventListener('change', function() {
-        var file = this.files[0];
-        var previewLink = document.getElementById('previewDoc2');
-        var filePreview = document.getElementById('filePreview');
-        var imagePreview = document.getElementById('imagePreview');
+        // Function to preview document 2
+        document.getElementById('document_2').addEventListener('change', function () {
+            var file = this.files[0];
+            var previewLink = document.getElementById('previewDoc2');
+            var filePreview = document.getElementById('filePreview');
+            var imagePreview = document.getElementById('imagePreview');
 
-        // If a file is selected, show the preview link
-        if (file) {
-            previewLink.style.display = 'inline';  // Show the preview link
-        } else {
-            previewLink.style.display = 'none';  // Hide the preview link
-        }
-
-        // File preview functionality when preview link is clicked
-        previewLink.addEventListener('click', function(e) {
-            if (!file) {
-                e.preventDefault(); // Prevent modal from opening if no file is selected
+            // If a file is selected, show the preview link
+            if (file) {
+                previewLink.style.display = 'inline';  // Show the preview link
             } else {
-                if (file.type.includes('image')) {
-                    imagePreview.style.display = 'block';
-                    filePreview.style.display = 'none';
-                    imagePreview.src = URL.createObjectURL(file);
-                } else {
-                    imagePreview.style.display = 'none';
-                    filePreview.style.display = 'block';
-                    filePreview.src = URL.createObjectURL(file);
-                }
+                previewLink.style.display = 'none';  // Hide the preview link
             }
-        });
-    });
-</script>
 
-<!-- Bootstrap JS and dependencies -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+            // File preview functionality when preview link is clicked
+            previewLink.addEventListener('click', function (e) {
+                if (!file) {
+                    e.preventDefault(); // Prevent modal from opening if no file is selected
+                } else {
+                    if (file.type.includes('image')) {
+                        imagePreview.style.display = 'block';
+                        filePreview.style.display = 'none';
+                        imagePreview.src = URL.createObjectURL(file);
+                    } else {
+                        imagePreview.style.display = 'none';
+                        filePreview.style.display = 'block';
+                        filePreview.src = URL.createObjectURL(file);
+                    }
+                }
+            });
+        });
+    </script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
