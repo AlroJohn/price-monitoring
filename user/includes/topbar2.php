@@ -6,12 +6,12 @@
     </div>
 
     <!-- Search Bar -->
-    <form action="search_handler.php" method="GET" class="w-1/2 relative">
+    <!-- <form action="search_handler.php" method="GET" class="w-1/2 relative">
         <input type="text" id="searchInput" name="query" placeholder="Search..."
             class="border rounded-lg px-4 py-2 w-full focus:ring focus:ring-blue-300" onkeyup="liveSearch(this.value)">
         <div id="searchResults" class="absolute top-full left-0 w-full bg-white shadow-lg rounded-lg mt-1 z-50 hidden">
         </div>
-    </form>
+    </form> -->
 
     <!-- Reserved Space -->
     <div></div>
