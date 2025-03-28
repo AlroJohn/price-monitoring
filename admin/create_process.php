@@ -5,24 +5,25 @@ require('../includes/connection.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Collect and sanitize form data
     $first_name = trim($_POST['first_name']);
+    $middle_name = isset($_POST['middle_name']) ? trim($_POST['middle_name']) : ''; // Optional
     $last_name = trim($_POST['last_name']);
+    $suffix = isset($_POST['suffix']) ? trim($_POST['suffix']) : ''; // Optional
     $username = trim($_POST['username']);
     $password = $_POST['password']; // Get the raw password
     $store_id = $_POST['store_id'];
-    $gender = $_POST['gender']; // New field
-    $email = $_POST['email']; // New field
-    $phone_number = $_POST['phone_number']; // New field
+    $gender = $_POST['gender'];
+    $email = $_POST['email'];
+    $phone_number = $_POST['phone_number'];
     $street = null; // Street is set to null
-    $purok = $_POST['purok']; // New field for Purok
-    $barangay = $_POST['barangay']; // New field for Barangay
-    $shop_name = trim($_POST['shop_name']); // Store/Shop Name
-    $hired_date = date('Y-m-d'); // Automatically set current date if it's not passed in the form
-    $status = 'Pending'; // Set default status
+    $purok = $_POST['purok'];
+    $barangay = $_POST['barangay'];
+    $shop_name = trim($_POST['shop_name']);
+    $hired_date = date('Y-m-d');
+    $status = 'Pending';
 
     // Set default values for JOB_ID and TYPE_ID
     $type_id = 3; // Set TYPE_ID to 3 (Manager)
     $job_id = 0; // Set job_id explicitly for the owner
-
 
     // Generate SHOP_ID (move this up to be before document file handling)
     $shop_id = mt_rand(10000000, 99999999); // Generate a random 8-digit SHOP_ID
@@ -33,26 +34,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Handle file uploads for DOCUMENT_1 and DOCUMENT_2
     if (isset($_FILES['document_1']) && $_FILES['document_1']['error'] == UPLOAD_ERR_OK) {
-        // Generate file paths with SHOP_ID + 1 and SHOP_ID + 2 for document names
         $document_1_filename = '../assets/documents/' . $shop_id . '1' . '.' . pathinfo($_FILES['document_1']['name'], PATHINFO_EXTENSION);
         move_uploaded_file($_FILES['document_1']['tmp_name'], $document_1_filename);
-        $document_1 = $document_1_filename; // Save file path to the variable
+        $document_1 = $document_1_filename;
     } else {
-        // If document_1 is not uploaded, set as NULL (or you can skip this step if required)
         $document_1 = null;
     }
 
     if (isset($_FILES['document_2']) && $_FILES['document_2']['error'] == UPLOAD_ERR_OK) {
-        // Generate file paths with SHOP_ID + 2 for document names
         $document_2_filename = '../assets/documents/' . $shop_id . '2' . '.' . pathinfo($_FILES['document_2']['name'], PATHINFO_EXTENSION);
         move_uploaded_file($_FILES['document_2']['tmp_name'], $document_2_filename);
-        $document_2 = $document_2_filename; // Save file path to the variable
+        $document_2 = $document_2_filename;
     } else {
-        // If document_2 is not uploaded, set as NULL (or you can skip this step if required)
         $document_2 = null;
     }
 
-    // Validation
+    // Validation: check required fields (middle_name and suffix are optional)
     if (empty($first_name) || empty($last_name) || empty($username) || empty($password) || empty($store_id) || empty($gender) || empty($email) || empty($phone_number) || empty($purok) || empty($barangay) || empty($shop_name)) {
         die('All fields are required.');
     }
@@ -96,9 +93,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Generate a random 5-digit OWNER_ID
     $owner_id = mt_rand(10000, 99999);
 
-    // Insert into owners table (formerly employee table) with the LOCATION_ID and JOB_ID = 1
-    $insert_owner_stmt = $db->prepare("INSERT INTO owners (OWNER_ID, FIRST_NAME, LAST_NAME, JOB_ID, GENDER, EMAIL, PHONE_NUMBER, HIRED_DATE, LOCATION_ID, STATUS, SHOP_ID, DOCUMENT_1, DOCUMENT_2) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $insert_owner_stmt->bind_param('ississssissss', $owner_id, $first_name, $last_name, $job_id, $gender, $email, $phone_number, $hired_date, $location_id, $status, $shop_id, $document_1, $document_2);
+    // Insert into owners table with the additional middle name and suffix fields
+    // Corrected type string: 10th parameter (hired_date) should be "s" not "i"
+    $insert_owner_stmt = $db->prepare("INSERT INTO owners (OWNER_ID, FIRST_NAME, MIDDLE_NAME, LAST_NAME, SUFFIX, JOB_ID, GENDER, EMAIL, PHONE_NUMBER, HIRED_DATE, LOCATION_ID, STATUS, SHOP_ID, DOCUMENT_1, DOCUMENT_2) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $insert_owner_stmt->bind_param(
+        'issssissssisiss', // Note the change at the 10th position: hired_date is now "s"
+        $owner_id,
+        $first_name,
+        $middle_name,
+        $last_name,
+        $suffix,
+        $job_id,
+        $gender,
+        $email,
+        $phone_number,
+        $hired_date,
+        $location_id,
+        $status,
+        $shop_id,
+        $document_1,
+        $document_2
+    );
 
     if (!$insert_owner_stmt->execute()) {
         die('Failed to add owner.');
@@ -117,13 +132,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $insert_user_stmt->bind_param('isssis', $owner_id, $username, $password, $type_id, $store_id, $shop_id);
 
     if ($insert_user_stmt->execute()) {
-        session_start(); // Ensure the session is started
+        session_start();
         $_SESSION['success_message'] = 'Account successfully created! Your shop ID is ' . $shop_id . '.';
 
         // Redirect to receipt.php with the shop_id
         header('Location: receipt.php?shop_id=' . $shop_id);
         exit;
-
     } else {
         die('Failed to create account.');
     }

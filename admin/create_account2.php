@@ -83,7 +83,7 @@ $stores = $store_query->fetch_all(MYSQLI_ASSOC);
                     </a>
                 </div>
                 <div class="col-md-6">
-                    <a href="create_account.php" class="btn btn-primary active w-100">
+                    <a href="create_account2.php" class="btn btn-primary active w-100">
                         <i class="fas fa-flip-horizontal fa-fw fa-user"></i> REGISTER
                     </a>
                 </div>

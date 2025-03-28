@@ -155,7 +155,7 @@ if (isset($_POST['ajax'])) {
 
     <!-- Back Button -->
     <div class="max-w-4xl mx-auto mb-4">
-        <button onclick="window.location.href='index.php'"
+        <button onclick="window.location.href='price_monitoring.php'"
             class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
             <i class="fas fa-arrow-left mr-2"></i> Back
         </button>
