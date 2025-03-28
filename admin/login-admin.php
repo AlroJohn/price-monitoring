@@ -23,7 +23,7 @@ session_start();
 
         <!-- Navigation Links -->
         <div>
-            <a href="../user/pages/index.php" class="text-white text-lg font-semibold hover:underline">
+            <a href="../user/pages/price_monitoring.php" class="text-white text-lg font-semibold hover:underline">
                 Go to Homepage
             </a>
         </div>

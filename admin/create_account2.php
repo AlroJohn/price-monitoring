@@ -75,9 +75,7 @@ $stores = $store_query->fetch_all(MYSQLI_ASSOC);
 
 <body>
     <div class="container-fluid">
-
         <div class="container" style="border-radius: 20px;">
-
             <div class="row mb-3">
                 <div class="col-md-6">
                     <a href="login-admin.php" class="btn active w-100" style=" background-color:Whitesmoke;">
@@ -106,8 +104,22 @@ $stores = $store_query->fetch_all(MYSQLI_ASSOC);
                             </div>
                             <div class="col">
                                 <div class="mb-3">
+                                    <label for="middle_name" class="form-label">Middle Name (Optional)</label>
+                                    <input type="text" name="middle_name" id="middle_name" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
                                     <label for="last_name" class="form-label">Last Name</label>
                                     <input type="text" name="last_name" id="last_name" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="suffix" class="form-label">Suffix (Optional)</label>
+                                    <input type="text" name="suffix" id="suffix" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -199,8 +211,8 @@ $stores = $store_query->fetch_all(MYSQLI_ASSOC);
                                     <label for="document_2" class="form-label">Upload Valid ID</label>
                                     <input type="file" name="document_2" id="document_2" class="form-control" required>
                                     <!-- Mini details text with smaller font size and less opacity -->
-                                    <small style="font-size: 0.8rem; opacity: 0.7;">(ex. National ID, Drivers ID..
-                                        )</small><br>
+                                    <small style="font-size: 0.8rem; opacity: 0.7;">(ex. National ID, Drivers
+                                        ID..)</small><br>
                                     <!-- Link to open modal for Document 2 preview (Initially hidden) -->
                                     <a href="#" id="previewDoc2" data-bs-toggle="modal" data-bs-target="#previewModal"
                                         style="display:none;">Preview</a>
@@ -259,7 +271,9 @@ $stores = $store_query->fetch_all(MYSQLI_ASSOC);
                         <div id="reviewInfo">
                             <h4>Review Your Information</h4>
                             <p><strong>First Name:</strong> <span id="reviewFirstName"></span></p>
+                            <p><strong>Middle Name:</strong> <span id="reviewMiddleName"></span></p>
                             <p><strong>Last Name:</strong> <span id="reviewLastName"></span></p>
+                            <p><strong>Suffix:</strong> <span id="reviewSuffix"></span></p>
                             <p><strong>Gender:</strong> <span id="reviewGender"></span></p>
                             <p><strong>Phone Number:</strong> <span id="reviewPhoneNumber"></span></p>
                             <p><strong>Purok:</strong> <span id="reviewPurok"></span></p>
@@ -283,11 +297,10 @@ $stores = $store_query->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- Back Button -->
             <div class="text-center mt-3">
-                <a href="/price-monitoring/user/pages/index.php" class="btn btn-secondary w-100">
+                <a href="/price-monitoring/user/pages/price_monitoring.php" class="btn btn-secondary w-100">
                     <i class="fas fa-arrow-left"></i> Home Page
                 </a>
             </div>
-
         </div>
     </div>
 
@@ -325,7 +338,9 @@ $stores = $store_query->fetch_all(MYSQLI_ASSOC);
                 console.log('Review Step Triggered');
                 // Populate the review fields with the form values
                 document.getElementById('reviewFirstName').textContent = document.getElementById('first_name').value;
+                document.getElementById('reviewMiddleName').textContent = document.getElementById('middle_name').value;
                 document.getElementById('reviewLastName').textContent = document.getElementById('last_name').value;
+                document.getElementById('reviewSuffix').textContent = document.getElementById('suffix').value;
                 document.getElementById('reviewGender').textContent = document.getElementById('gender').value;
                 document.getElementById('reviewPhoneNumber').textContent = document.getElementById('phone_number').value;
                 document.getElementById('reviewPurok').textContent = document.getElementById('purok').value;

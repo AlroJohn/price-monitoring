@@ -148,7 +148,7 @@ if (isset($_GET['shop_id'])) {
             </table>
 
             <div class="text-center mt-6">
-                <a href="../index.html"
+                <a href="../user/pages/price_monitoring.php"
                     class="text-white bg-blue-500 px-6 py-3 rounded-md hover:bg-blue-600">Proceed</a>
             </div>
         </div>
