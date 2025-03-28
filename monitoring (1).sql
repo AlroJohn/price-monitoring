@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 28, 2025 at 02:44 AM
+-- Generation Time: Mar 28, 2025 at 07:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -118,48 +118,6 @@ CREATE TABLE `product` (
   `SUPPLIER_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
--- Dumping data for table `product`
---
-
-INSERT INTO `product` (`SHOP_ID`, `PRODUCT_ID`, `STORE_ID`, `PRODUCT_CODE`, `NAME`, `DESCRIPTION`, `QTY_STOCK`, `MEASURE`, `PRICE`, `IMAGE`, `DATE_STOCK_IN`, `DATE_EXPIRY`, `pro_status`, `CATEGORY_ID`, `SUPPLIER_ID`) VALUES
-(77981742, 1227, 2, '1111', 'Pedigree', 'Dog Food', 10, 'kilo', 135.000, '../../assets/product_img/Pedigree779817421227.jpg', '2025-03-08', '2025-10-20', 'active', NULL, NULL),
-(77981742, 1228, 2, '2222', 'Triple Crown', 'Bird Feeds', 5, 'kilo', 70.000, '../../assets/product_img/Triple Crown779817421228.jpg', '2025-02-03', '2025-08-13', 'active', NULL, NULL),
-(77981742, 1233, 2, '3333', 'PRESTO Regular Pellet', 'cockfeeds', 0, 'kilo', 31.000, '../../assets/product_img/PRESTO Regular Pellet779817421233.jpg', '2025-01-31', '2025-12-27', 'active', NULL, NULL),
-(77981742, 1234, 2, '4444', 'Premium Pre-Starter', 'feeds', 30, 'kilo', 62.250, '../../assets/product_img/Premium Pre-Starter779817421234.jpg', '2025-01-31', '2025-12-28', 'active', NULL, NULL),
-(77981742, 1235, 2, '5555', 'Lucy Cat Food', 'catfood', 20, 'kilo', 130.000, '../../assets/product_img/Lucy Cat Food779817421235.jpg', '2025-03-01', '2025-11-10', 'active', NULL, NULL),
-(73798598, 1236, 2, '1222', 'PIGROLAC Hog Starter', 'feeds', 30, 'kilo', 41.500, '../../assets/product_img/PIGROLAC Hog Starter737985981236.jpg', '2024-12-16', '2025-08-27', 'active', NULL, NULL),
-(73798598, 1237, 2, '1333', 'WHISKAS ADULT', 'CatFood', 20, 'kilo', 160.000, '../../assets/product_img/WHISKAS ADULT737985981237.jpg', '2025-01-15', '2025-07-09', 'active', NULL, NULL),
-(73798598, 1238, 2, '1444', 'WHISKAS KITTEN', 'Cat Food', 20, 'kilo', 170.000, '../../assets/product_img/WHISKAS KITTEN737985981238.jpg', '2024-12-09', '2025-07-16', 'active', NULL, NULL),
-(73798598, 1239, 2, '1555', 'YUM YUM ADULT', 'Dog Food', 20, 'kilo', 85.000, '../../assets/product_img/YUM YUM ADULT737985981239.jpg', '2025-02-04', '2025-11-03', 'active', NULL, NULL),
-(73798598, 1240, 2, '1666', 'SUPRA Turbo Conditioning Concentrate', 'Cock Feeds', 30, 'kilo', 40.000, '../../assets/product_img/SUPRA Turbo Conditioning Concentrate737985981240.jpg', '2025-01-09', '2025-10-17', 'active', NULL, NULL),
-(73798598, 1241, 2, '1777', 'FIRE BIRD Conditioner', 'Cock Feeds', 30, 'kilo', 37.500, '../../assets/product_img/FIRE BIRD Conditioner737985981241.jpg', '2025-01-23', '2025-09-17', 'active', NULL, NULL),
-(73798598, 1242, 2, '1888', 'SUPRA Cockers Brown', 'Cock Feeds', 30, 'kilo', 32.000, '../../assets/product_img/SUPRA Cockers Brown737985981242.jpg', '2025-01-08', '2025-09-11', 'active', NULL, NULL),
-(73798598, 1243, 2, '1999', 'PIGROLAC Hog Grower', 'Pig Feeds', 30, 'kilo', 39.500, '../../assets/product_img/PIGROLAC Hog Grower737985981243.jpg', '2025-02-05', '2025-09-04', 'active', NULL, NULL),
-(42302750, 1244, 1, '2111', 'Giniling', 'Pork', 5, 'kilo', 380.000, '../../assets/product_img/Giniling423027501244.jpg', '2025-03-12', '2025-03-13', 'active', NULL, NULL),
-(42302750, 1245, 1, '2333', 'MEAT', 'Pork', 20, 'kilo', 360.000, '../../assets/product_img/MEAT423027501245.jpg', '2025-03-12', '2025-03-13', 'active', NULL, NULL),
-(42302750, 1246, 1, '2444', 'LIVER', 'Pork', 5, 'kilo', 300.000, '../../assets/product_img/LIVER423027501246.jpg', '2025-03-12', '2025-03-13', 'active', NULL, NULL),
-(67692435, 1248, 1, '3111', 'MEAT', 'Pork', 10, 'kilo', 360.000, '../../assets/product_img/MEAT676924351742015653.png', '2025-03-15', '2025-03-16', 'active', NULL, NULL),
-(67692435, 1249, 1, '3222', 'PATA', 'Pork', 4, 'kilo', 200.000, '../../assets/product_img/PATA676924351742015701.png', '2025-03-15', '2025-03-16', 'active', NULL, NULL),
-(67692435, 1250, 1, '3444', 'LIVER', 'Pork', 5, 'kilo', 300.000, '../../assets/product_img/LIVER676924351742015758.png', '2025-03-15', '2025-03-15', 'active', NULL, NULL),
-(20670572, 1251, 3, '4111', 'GALVANIZE SCREEN', 'Screen', 10, 'meter', 120.000, '../../assets/product_img/GALVANIZE SCREEN206705721742016242.jpg', '2025-01-30', '2025-09-09', 'active', NULL, NULL),
-(20670572, 1252, 3, '4222', 'PLAIN SHEET', 'PLAIN SHEET', 5, 'roll', 40.000, '../../assets/product_img/PLAIN SHEET206705721742016334.jpg', '2025-03-01', '2025-11-18', 'active', NULL, NULL),
-(20670572, 1253, 3, '4333', 'MOLD FLEX', 'Mold Flex', 5, 'piece', 15.000, '../../assets/product_img/MOLD FLEX206705721742016601.jpg', '2025-02-18', '2025-09-30', 'active', NULL, NULL),
-(20670572, 1254, 3, '4555', 'HOLLOW BLOCKS', 'Hollow Blocks', 50, 'piece', 12.000, '../../assets/product_img/HOLLOW BLOCKS206705721742016779.jpg', '2025-03-15', '2026-01-08', 'active', NULL, NULL),
-(20670572, 1255, 3, '4666', 'RSB', '10mm', 40, 'kilo', 120.000, '../../assets/product_img/r206705721742016864.jpg', '2025-03-05', '2025-10-14', 'active', NULL, NULL),
-(20670572, 1256, 3, '4777', 'RSB', '12mm', 50, 'piece', 180.000, '../../assets/product_img/RSB206705721742016954.jpg', '2025-03-05', '2025-11-19', 'active', NULL, NULL),
-(20670572, 1257, 3, '488', 'DEDOS', 'Nail', 15, 'set', 90.000, '../../assets/product_img/DEDOS206705721742017023.jpg', '2025-03-04', '2025-10-15', 'active', NULL, NULL),
-(20670572, 1258, 3, '4999', 'TIE WIRE', 'Wire', 10, 'set', 90.000, '../../assets/product_img/TIE WIRE206705721742017110.jpg', '2025-03-05', '2025-10-15', 'active', NULL, NULL),
-(56772380, 1259, 3, '5111', 'RSB', '10mm', 50, 'piece', 139.000, '../../assets/product_img/RSB567723801742017343.jpg', '2025-03-12', '2025-08-07', 'active', NULL, NULL),
-(56772380, 1260, 3, '5222', 'RSB', '12mm', 50, 'piece', 192.000, '../../assets/product_img/RSB567723801742017505.jpg', '2025-03-05', '2025-09-11', 'active', NULL, NULL),
-(56772380, 1261, 3, '5333', 'GALVANIZE SCREEN', 'ScreeN', 5, 'meter', 150.000, '../../assets/product_img/GALVANIZE SCREEN567723801742017765.jpg', '2025-01-10', '2025-07-04', 'active', NULL, NULL),
-(56772380, 1262, 3, '5444', 'DECORATED BLOCK', 'Block', 20, 'piece', 40.000, '../../assets/product_img/DECORATED BLOCK567723801742017850.jpg', '2025-02-12', '2025-10-31', 'active', NULL, NULL),
-(56772380, 1263, 3, '5666', 'CYCLONE WIRE', 'Wire', 5, 'meter', 900.000, '../../assets/product_img/CYCLONE WIRE567723801742018043.jpg', '2025-01-12', '2025-11-02', 'active', NULL, NULL),
-(56772380, 1264, 3, '5777', 'TIE WIRE', 'Wire', 10, 'set', 90.000, '../../assets/product_img/TIE WIRE567723801742018208.jpg', '2025-03-12', '2025-12-11', 'active', NULL, NULL),
-(56772380, 1265, 3, '5888', 'CONCRETE NAIL', 'Nail', 20, 'set', 100.000, '../../assets/product_img/CONCRETE NAIL567723801742018306.jpg', '2025-01-12', '2025-11-04', 'active', NULL, NULL),
-(56772380, 1266, 3, '5999', 'UMBRELLA NAIL', 'Nail', 20, 'kilo', 90.000, '../../assets/product_img/UM567723801742018407.jpg', '2025-01-12', '2025-11-04', 'active', NULL, NULL),
-(77981742, 1267, 2, '6111', 'pellets', 'sacsa', 12, 'kilo', 32.000, '../../assets/product_img/pellets779817421742029833.jpg', '2025-03-11', '2025-10-01', 'active', NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -211,8 +169,8 @@ CREATE TABLE `stores` (
 INSERT INTO `stores` (`SHOP_ID`, `STORE_ID`, `SHOP_NAME`, `ADDRESS`, `IMAGE`, `AVAILABILITY`, `TIMESTAMP`, `TIME_OPEN`, `TIME_CLOSE`, `id`) VALUES
 (20670572, 3, 'SAMARINA CONTRUCTION HARDWARE', 'Legazpi City Albay', 0x616c6970696f2e6a7067, 'Open', '2025-03-11 07:55:05', '05:00', '19:00', 3),
 (42302750, 1, 'A. BOSEO', '', 0x626f73656f2e6a7067, 'Open', '2025-03-11 21:27:06', '05:00', '17:00', 5),
-(67692435, 1, 'JMIC MEAT SHOP', '', 0x53637265656e73686f7420323032352d30332d3133203131343834342e706e67, 'Open', '2025-03-15 02:48:00', '05:00 AM', '12:00 PM', 7),
-(77981742, 2, 'ALIPIO STORE', 'Legazpi City ', 0x616c6970696f2e6a7067, '', '2025-03-10 23:55:05', '05:00', '19:00', 8),
+(67692435, 1, 'JMIC MEAT SHOP', '', 0x53637265656e73686f7420323032352d30332d3133203131343834342e706e67, 'Close', '2025-03-15 02:48:00', '05:00 AM', '12:00 PM', 7),
+(77981742, 2, 'ALIPIO STORE', 'Legazpi City ', 0x616c6970696f2e6a7067, 'Close', '2025-03-10 23:55:05', '05:00', '19:00', 8),
 (61374502, 3, 'Test', NULL, NULL, 'Open', '2025-03-28 01:39:50', '05:00 AM', '12:00 PM', 12);
 
 -- --------------------------------------------------------
@@ -243,18 +201,19 @@ INSERT INTO `store_locations` (`ID`, `SHOP_ID`, `LATITUDE`, `LONGITUDE`) VALUES
 
 CREATE TABLE `store_type` (
   `STORE_ID` int(11) NOT NULL,
-  `CATEGORY` varchar(255) NOT NULL
+  `CATEGORY` varchar(255) NOT NULL,
+  `ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `store_type`
 --
 
-INSERT INTO `store_type` (`STORE_ID`, `CATEGORY`) VALUES
-(2, 'Animal Feeds'),
-(3, 'Hardware'),
-(4, 'General Merchandise'),
-(1, 'Meatshop');
+INSERT INTO `store_type` (`STORE_ID`, `CATEGORY`, `ID`) VALUES
+(2, 'Animal Feeds', 1),
+(3, 'Hardware', 2),
+(1, 'Meatshop', 4),
+(4, 'General Merchandise', 7);
 
 -- --------------------------------------------------------
 
@@ -336,9 +295,9 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`ID`, `SHOP_ID`, `OWNER_ID`, `USERNAME`, `PASSWORD`, `TYPE_ID`, `STORE_ID`) VALUES
 (37, 1, 1, 'Admin', 'Admin1234', 1, 1),
 (39, 20670572, 18488, 'samarina', 'samarina123', 3, 3),
-(40, 77981742, 47588, 'alipio', 'alipio123', 2, 2),
-(42, 42302750, 21338, 'buddy', 'buddy123', 1, 1),
-(44, 67692435, 84785, 'malto', 'malto123', 1, 1),
+(40, 77981742, 47588, 'alipio', 'alipio123', 3, 2),
+(42, 42302750, 21338, 'buddy', 'buddy123', 3, 1),
+(44, 67692435, 84785, 'malto', 'malto123', 3, 1),
 (49, 61374502, 81930, 'test', 'test', 3, 3);
 
 --
@@ -384,6 +343,12 @@ ALTER TABLE `stores`
 -- Indexes for table `store_locations`
 --
 ALTER TABLE `store_locations`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `store_type`
+--
+ALTER TABLE `store_type`
   ADD PRIMARY KEY (`ID`);
 
 --
@@ -446,6 +411,12 @@ ALTER TABLE `stores`
 --
 ALTER TABLE `store_locations`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `store_type`
+--
+ALTER TABLE `store_type`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `store_visit`
