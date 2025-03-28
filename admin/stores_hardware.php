@@ -30,10 +30,6 @@ if (isset($_POST['delete_store']) && isset($_POST['shop_id'])) {
         $delete_users = "DELETE FROM users WHERE SHOP_ID = $shop_id";
         mysqli_query($db, $delete_users);
 
-        // Delete from store_type table
-        $delete_store_type = "DELETE FROM store_type WHERE STORE_ID = (SELECT STORE_ID FROM stores WHERE SHOP_ID = $shop_id)";
-        mysqli_query($db, $delete_store_type);
-
         // Finally delete from stores table
         $delete_store = "DELETE FROM stores WHERE SHOP_ID = $shop_id";
         mysqli_query($db, $delete_store);

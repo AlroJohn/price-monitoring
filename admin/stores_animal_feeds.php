@@ -13,34 +13,30 @@ $result = mysqli_query($db, $query);
 // Handle delete operation - Delete from multiple related tables
 if (isset($_POST['delete_store']) && isset($_POST['shop_id'])) {
     $shop_id = $_POST['shop_id'];
-    
+
     // Begin transaction to ensure all operations complete or none
     mysqli_begin_transaction($db);
-    
+
     try {
         // Delete from products table
         $delete_products = "DELETE FROM product WHERE SHOP_ID = $shop_id";
         mysqli_query($db, $delete_products);
-        
+
         // Delete from owners table
         $delete_owner = "DELETE FROM owners WHERE SHOP_ID = $shop_id";
         mysqli_query($db, $delete_owner);
-        
+
         // Delete from users table related to this shop
         $delete_users = "DELETE FROM users WHERE SHOP_ID = $shop_id";
         mysqli_query($db, $delete_users);
-        
-        // Delete from store_type table
-        $delete_store_type = "DELETE FROM store_type WHERE STORE_ID = (SELECT STORE_ID FROM stores WHERE SHOP_ID = $shop_id)";
-        mysqli_query($db, $delete_store_type);
-        
+
         // Finally delete from stores table
         $delete_store = "DELETE FROM stores WHERE SHOP_ID = $shop_id";
         mysqli_query($db, $delete_store);
-        
+
         // Commit the transaction
         mysqli_commit($db);
-        
+
         // Redirect to refresh the page
         header("Location: " . $_SERVER['PHP_SELF']);
         exit();
@@ -197,9 +193,10 @@ include('../includes/sidebar.php'); // Sidebar for navigation
 
             <p class="mb-4">Are you sure you want to delete <span id="deleteStoreName" class="font-semibold"></span>?
                 This action cannot be undone.</p>
-                
+
             <p class="mb-4 text-red-600 text-sm">
-                <strong>Warning:</strong> This will also delete all related products, owner accounts, and user accounts associated with this store.
+                <strong>Warning:</strong> This will also delete all related products, owner accounts, and user accounts
+                associated with this store.
             </p>
 
             <form id="deleteForm" method="post" action="">
