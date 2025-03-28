@@ -53,10 +53,11 @@ $totalProducts = mysqli_num_rows($productResult);
 
     <section class="container mx-auto my-5 px-4">
         <!-- Back Button -->
-        <a href="<?php echo isset($_GET['product_code']) ? 'product_details.php?shop_id=' . $shop_id . '&product_code=' . $_GET['product_code'] : 'index.php'; ?>"
+        <a href="javascript:history.back()"
             class="inline-block bg-gray-700 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-800 transition">
             <i class="fas fa-reply mr-2"></i> Back
         </a>
+
 
         <!-- Store Info -->
         <div class="bg-white p-6 shadow-lg rounded-lg grid grid-cols-3 items-center gap-4 mt-4">
