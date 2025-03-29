@@ -344,6 +344,8 @@ $result = mysqli_stmt_get_result($stmt);
                             <option value="meter">Meter</option>
                             <option value="liter">Liter</option>
                             <option value="roll">Roll</option>
+                            <option value="pack">Pack</option>
+                            <option value="kilo">Kilo</option>
                         </select>
 
                     </div>
