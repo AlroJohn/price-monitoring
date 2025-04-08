@@ -1,6 +1,13 @@
 <?php
 include('../../includes/connection.php');
 
+// Include Telerivet PHP client for SMS
+require_once '../../telerivet-php-client/telerivet.php';
+
+// Telerivet credentials
+$api_key = "iorNG_tQnRg6wi4gySKTK7ZHeqESikOr5JgM";
+$project_id = "PJ59c301d36eac6193";
+
 if (!isset($_GET['shop_id']) || !isset($_GET['product_code'])) {
     echo "<p class='text-red-500 text-center mt-10'>Invalid request.</p>";
     exit();
@@ -48,6 +55,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     VALUES ('$shop_id', '$product_code', '$customer_name', '$contact_number', '$quantity', '$pickup_date', '$calculated_price')";
 
     if (mysqli_query($db, $insertQuery)) {
+        // Get the owner's phone number using shop_id
+        $ownerQuery = "SELECT PHONE_NUMBER FROM owners WHERE SHOP_ID = '$shop_id'";
+        $ownerResult = mysqli_query($db, $ownerQuery);
+
+        if ($ownerResult && mysqli_num_rows($ownerResult) > 0) {
+            $owner = mysqli_fetch_assoc($ownerResult);
+            $owner_contact = $owner['PHONE_NUMBER'];
+
+            // Send SMS notification to the owner about the new reservation
+            try {
+                // Initialize the Telerivet API
+                $telerivet = new Telerivet_API($api_key);
+
+                // Get a reference to the project
+                $project = $telerivet->initProjectById($project_id);
+
+                // Prepare message for the owner
+                $message = "New Reservation Alert: Customer " . strtoupper($customer_name) . " has reserved "
+                    . $quantity . " " . $product['MEASURE'] . " of " . strtoupper($product['NAME'])
+                    . ". Pickup Date: " . date('M d, Y', strtotime($pickup_date))
+                    . ". Total Amount: PHP " . number_format($calculated_price, 2);
+
+                // Send the message to owner
+                $sent_msg = $project->sendMessage(array(
+                    'to_number' => $owner_contact,
+                    'content' => $message
+                ));
+
+                error_log("SMS sent to store owner at $owner_contact. Message ID: " . $sent_msg->id);
+            } catch (Exception $e) {
+                error_log("SMS failed: " . $e->getMessage());
+            }
+        }
+
         // Redirect using PRG to prevent duplicate submissions
         header("Location: " . $_SERVER['PHP_SELF'] . "?shop_id=$shop_id&product_code=$product_code&success=1");
         exit();

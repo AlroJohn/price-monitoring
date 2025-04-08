@@ -1,110 +1,232 @@
 <?php
-// Include database connection
-include '../../includes/connection.php';
+include('../../includes/connection.php');
 
-// Fetch store owner details using the SHOP_ID from the session
-$shop_id = $_SESSION['SHOP_ID'];  // Get SHOP_ID from session
+if (!isset($_GET['shop_id']) || !isset($_GET['product_code'])) {
+    echo "<p class='text-red-500 text-center mt-10'>Invalid request.</p>";
+    exit();
+}
 
-// Fetch SHOP_NAME from the stores table using SHOP_ID
-$query_shop_name = "SELECT SHOP_NAME FROM stores WHERE SHOP_ID = ?";
-$stmt_shop_name = mysqli_prepare($db, $query_shop_name);
-mysqli_stmt_bind_param($stmt_shop_name, "i", $shop_id);
-mysqli_stmt_execute($stmt_shop_name);
-$result_shop_name = mysqli_stmt_get_result($stmt_shop_name);
-$shop_name_row = mysqli_fetch_assoc($result_shop_name);
-$shop_name = $shop_name_row['SHOP_NAME'];
+$shop_id = mysqli_real_escape_string($db, $_GET['shop_id']);
+$product_code = mysqli_real_escape_string($db, $_GET['product_code']);
 
-// Get current page
-$current_page = basename($_SERVER['PHP_SELF']);
+$productQuery = "SELECT NAME, PRICE, QTY_STOCK, MEASURE FROM product WHERE SHOP_ID = '$shop_id' AND PRODUCT_CODE = '$product_code'";
+$productResult = mysqli_query($db, $productQuery);
+$product = mysqli_fetch_assoc($productResult);
+
+if (!$product) {
+    echo "<p class='text-red-500 text-center mt-10'>Product not found.</p>";
+    exit();
+}
+
+$min_date = date('Y-m-d');
+$max_date = date('Y-m-d', strtotime('+5 days'));
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Separate name fields for customer
+    $first_name = mysqli_real_escape_string($db, $_POST['first_name']);
+    $middle_name = mysqli_real_escape_string($db, $_POST['middle_name']);
+    $last_name = mysqli_real_escape_string($db, $_POST['last_name']);
+
+    // Concatenate first name, middle initial, and last name
+    $middle_initial = strtoupper(substr($middle_name, 0, 1)) . '.';
+    $customer_name = $first_name . ' ' . $middle_initial . ' ' . $last_name;
+
+    $contact_number = mysqli_real_escape_string($db, $_POST['contact_number']);
+    $quantity = (int) $_POST['quantity'];
+    $pickup_date = mysqli_real_escape_string($db, $_POST['pickup_date']);
+    $calculated_price = mysqli_real_escape_string($db, $_POST['calculated_price']);
+
+    // Validate pickup date
+    if ($pickup_date < $min_date || $pickup_date > $max_date) {
+        echo "<p class='text-red-500 text-center mt-10'>Invalid pickup date selected.</p>";
+        exit();
+    }
+
+    $insertQuery = "INSERT INTO reservations (SHOP_ID, PRODUCT_CODE, CUSTOMER_NAME, CONTACT_NUMBER, QUANTITY, PICKUP_DATE, CALCULATED_PRICE)
+                    VALUES ('$shop_id', '$product_code', '$customer_name', '$contact_number', '$quantity', '$pickup_date', '$calculated_price')";
+
+    if (mysqli_query($db, $insertQuery)) {
+        // Redirect using PRG to prevent duplicate submissions
+        header("Location: " . $_SERVER['PHP_SELF'] . "?shop_id=$shop_id&product_code=$product_code&success=1");
+        exit();
+
+        // After reservation, send SMS to store owner
+
+        // Get Store Owner's Contact Number
+        $ownerQuery = "SELECT CONTACT_NUMBER FROM owners WHERE SHOP_ID = '$shop_id'";
+        $ownerResult = mysqli_query($db, $ownerQuery);
+        $owner = mysqli_fetch_assoc($ownerResult);
+        $store_owner_contact = $owner['CONTACT_NUMBER'];
+
+        // Prepare the SMS message
+        $message = "New reservation request:\n";
+        $message .= "Name: $customer_name\n";
+        $message .= "Contact: $contact_number\n";
+        $message .= "Quantity: $quantity " . $product['MEASURE'] . "\n";
+        $message .= "Total Price: ₱" . number_format($product['PRICE'] * $quantity, 2);
+
+        // Send the SMS to the store owner using Telerivet API
+        $api_key = 'your_telerivet_api_key';
+        $project_id = 'your_project_id';
+        $url = "https://api.telerivet.com/v1/projects/$project_id/messages/send";
+
+        $data = array(
+            'to' => $store_owner_contact,
+            'content' => $message,
+            'api_key' => $api_key
+        );
+
+        // Use cURL to send the SMS request
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        // Optionally handle the response if needed
+    } else {
+        echo "<p class='text-red-500 text-center mt-10'>Error: " . mysqli_error($db) . "</p>";
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Animal Feed Store</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserve Product</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 font-sans flex justify-center items-center h-screen">
 
-    <!-- Navigation Bar -->
-    <nav class="bg-green-700 shadow-md py-3 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 flex items-center justify-between text-white">
-            <!-- Left Side (Logo or Shop Name) -->
-            <div class="w-1/3">
-                <span class="text-xl font-semibold"><?= htmlspecialchars($shop_name) ?> </span>
-            </div>
+    <div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-xl">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+            Product name: <?php echo htmlspecialchars($product['NAME']); ?>
+        </h2>
 
-            <!-- Center (Empty for future use) -->
-            <div class="w-1/3"></div>
-
-            <!-- Right Side (Navigation Links) -->
-            <div class="w-1/3 flex justify-end space-x-4">
-                <a href="index.php"
-                    class="flex items-center px-4 py-2 rounded-lg transition hover:bg-green-800 <?= ($current_page == 'index.php') ? 'bg-green-800 font-bold' : '' ?>">
-                    <i class="ph ph-house text-lg"></i> <span class="ml-2">Home</span>
-                </a>
-                <a href="products.php"
-                    class="flex items-center px-4 py-2 rounded-lg transition hover:bg-green-800 <?= ($current_page == 'products.php') ? 'bg-green-800 font-bold' : '' ?>">
-                    <i class="ph ph-package text-lg"></i> <span class="ml-2">Products</span>
-                </a>
-                <a href="reservations.php"
-                    class="flex items-center px-4 py-2 rounded-lg transition hover:bg-green-800 <?= ($current_page == 'reservations.php') ? 'bg-green-800 font-bold' : '' ?>">
-                    <i class="ph ph-list-checks text-lg"></i> <span class="ml-2">Reservations</span>
-                </a>
-                <a href="map.php"
-                    class="flex items-center px-4 py-2 rounded-lg transition hover:bg-green-800 <?= ($current_page == 'map.php') ? 'bg-green-800 font-bold' : '' ?>">
-                    <i class="ph ph-calendar text-lg"></i> <span class="ml-2">Business </span>
-                </a>
-
-                <a href="settings.php"
-                    class="flex items-center px-4 py-2 rounded-lg transition hover:bg-green-800 <?= ($current_page == 'settings.php') ? 'bg-green-800 font-bold' : '' ?>">
-                    <i class="ph ph-gear text-lg"></i> <span class="ml-2">Settings</span>
-                </a>
-                <a href="logout.php" class="flex items-center px-4 py-2 rounded-lg transition hover:bg-red-500">
-                    <i class="ph ph-sign-out text-lg"></i> <span class="ml-2">Logout</span>
-                </a>
-            </div>
-
+        <div class="mb-6">
+            <p class="text-gray-600">Price: <span
+                    class="font-semibold text-indigo-600">₱<?php echo number_format($product['PRICE'], 2); ?>/<?php echo $product['MEASURE']; ?></span>
+            </p>
+            <p class="text-gray-600">Available Stock: <span
+                    class="font-semibold text-green-600"><?php echo $product['QTY_STOCK']; ?></span></p>
         </div>
-    </nav>
 
-    <!-- Animal Feed Product Section -->
+        <?php if (isset($_GET['success'])): ?>
+                <!-- Success Notification -->
+                <p class="text-green-500 text-center mt-10">Reservation Successful! Store owner will review your request.</p>
+                <script>
+                    // After 5 seconds, redirect to homepage
+                    setTimeout(function () {
+                        window.location.href = "price_monitoring.php";
+                    }, 5000);
+                </script>
+        <?php else: ?>
+                <!-- Reservation Form -->
+                <form method="POST" class="space-y-4">
+                    <!-- Separate Name Fields -->
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="flex flex-col gap-2">
+                            <label for="first_name" class="text-sm font-medium text-gray-700">First Name</label>
+                            <input type="text" id="first_name" name="first_name" required placeholder="First Name"
+                                class="w-full border-2 border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="middle_name" class="text-sm font-medium text-gray-700">Middle Name</label>
+                            <input type="text" id="middle_name" name="middle_name" required placeholder="Middle Name"
+                                class="w-full border-2 border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="last_name" class="text-sm font-medium text-gray-700">Last Name</label>
+                            <input type="text" id="last_name" name="last_name" required placeholder="Last Name"
+                                class="w-full border-2 border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
+                        </div>
+                    </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <?php
-        // Fetch Animal Feed Products from Database
-        $query = "SELECT PRODUCT_CODE, NAME, DESCRIPTION, PRICE, IMAGE FROM product WHERE SHOP_ID = ? AND CATEGORY_ID = (SELECT CATEGORY_ID FROM store_type WHERE STORE_ID = ? AND CATEGORY = 'Animal Feed')";
-        $stmt = mysqli_prepare($db, $query);
-        mysqli_stmt_bind_param($stmt, "ii", $shop_id, $shop_id);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
+                    <div>
+                        <label for="contact_number" class="text-sm font-medium text-gray-700">Contact Number</label>
+                        <input type="text" id="contact_number" name="contact_number" required placeholder="Contact Number"
+                            class="w-full border-2 border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
+                    </div>
 
-        while ($row = mysqli_fetch_assoc($result)):
-            $image_path = !empty($row['IMAGE']) && file_exists("../../assets/product_img/" . $row['IMAGE'])
-                ? "../../assets/product_img/" . $row['IMAGE']
-                : "../../assets/product_img/no_img.jpg";
-            ?>
-            <div class="bg-white shadow-lg rounded-lg p-4 transform hover:scale-105 transition">
-                <img src="<?= $image_path ?>" alt="<?= htmlspecialchars($row['NAME']) ?>"
-                    class="w-full h-40 object-cover rounded-md">
-                <h3 class="text-lg font-bold mt-3"><?= htmlspecialchars($row['NAME']) ?></h3>
-                <p class="text-sm text-gray-600"><?= htmlspecialchars($row['DESCRIPTION']) ?></p>
-                <p class="text-green-600 font-bold mt-2">₱<?= number_format($row['PRICE'], 2) ?></p>
-                <div class="mt-4 flex space-x-2">
-                    <a href="details.php?code=<?= $row['PRODUCT_CODE'] ?>"
-                        class="flex-1 text-center bg-blue-600 text-white px-3 py-2 rounded-md hover:bg-blue-700 transition">
-                        Details
-                    </a>
-                    <a href="reserve.php?code=<?= $row['PRODUCT_CODE'] ?>"
-                        class="flex-1 text-center bg-yellow-600 text-white px-3 py-2 rounded-md hover:bg-yellow-700 transition">
-                        Reserve
-                    </a>
-                </div>
-            </div>
-        <?php endwhile; ?>
+                    <div class="flex flex-row gap-4 items-center">
+                        <div class="flex-1">
+                            <label for="quantity"
+                                class="text-sm font-medium text-gray-700"><?php echo $product['MEASURE']; ?></label>
+                            <input type="number" id="quantity" name="quantity" required min="1" placeholder="Quantity"
+                                class="w-full border-2 border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
+                                oninput="updateTotalPrice()">
+                        </div>
+
+                        <div class="flex-none">
+                            <label for="fraction" class="text-sm font-medium text-gray-700">Fraction</label>
+                            <select id="fraction" name="fraction" required
+                                class="w-full border-2 border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
+                                onchange="updateTotalPrice()">
+                                <option value="1">Full</option>
+                                <option value="0.5">1/2</option>
+                                <option value="0.25">1/4</option>
+                                <option value="0.125">1/8</option>
+                                <option value="0.0625">1/16</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="calculated_price" class="text-sm font-medium text-gray-700">Total Price</label>
+                        <input type="text" id="calculated_price" name="calculated_price" readonly placeholder="Total Price"
+                            class="w-full border-2 border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
+                    </div>
+
+                    <div>
+                        <label for="pickup_date" class="text-sm font-medium text-gray-700">Pickup Date
+                            <span class="font-thin text-xs">(Pickup date is only 5 days from now)</span>
+                        </label>
+                        <input type="date" id="pickup_date" name="pickup_date" required placeholder="Pickup Date"
+                            min="<?php echo $min_date; ?>" max="<?php echo $max_date; ?>"
+                            class="w-full border-2 border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition duration-300 ease-in-out">
+                        Confirm Reservation
+                    </button>
+                </form>
+        <?php endif; ?>
+
+        <a href="javascript:history.back()" class="block text-center text-indigo-600 mt-6 hover:underline">
+            <i class="fas fa-arrow-left"></i> Back to Store
+        </a>
     </div>
+
+    <script>
+        const price = <?php echo $product['PRICE']; ?>;
+
+        function updateTotalPrice() {
+            const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+            const fraction = parseFloat(document.getElementById('fraction').value) || 1;
+            const totalPrice = price * quantity * fraction;
+            document.getElementById('calculated_price').value = totalPrice.toFixed(2);
+        }
+
+        // Client-side validation for pickup_date
+        document.getElementById('pickup_date').addEventListener('change', function () {
+            const minDate = new Date(this.min);
+            const maxDate = new Date(this.max);
+            const selectedDate = new Date(this.value);
+            if (selectedDate < minDate || selectedDate > maxDate) {
+                alert('Please select a pickup date between ' + this.min + ' and ' + this.max + '.');
+                this.value = '';
+            }
+        });
+    </script>
+
+</body>
+
+</html>

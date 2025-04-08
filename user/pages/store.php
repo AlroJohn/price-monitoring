@@ -112,7 +112,7 @@ $totalProducts = mysqli_num_rows($productResult);
                         <?php echo strlen($product['DESCRIPTION']) > 50 ? substr(htmlspecialchars($product['DESCRIPTION']), 0, 50) . '...' : htmlspecialchars($product['DESCRIPTION']); ?>
                     </p>
                     <p class="text-blue-500 text-sm font-bold mt-1">₱<?php echo number_format($product['PRICE'], 2); ?></p>
-                    <a href="reserve.php?shop_id=<?php echo $shop_id; ?>&product_code=<?php echo $product['PRODUCT_CODE']; ?>"
+                    <a href="reserve_index.php?shop_id=<?php echo $shop_id; ?>&product_code=<?php echo $product['PRODUCT_CODE']; ?>"
                         class="block bg-green-500 text-white text-xs py-1 mt-2 rounded shadow hover:bg-green-600">
                         Reserve
                     </a>
